@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: smart_health_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: smart_health_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/seed_data.sql:/docker-entrypoint-initdb.d/02_seed_data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smart_health_net
+
+  ml-service:
+    build:
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: smart_health_ml
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+    networks:
+      - smart_health_net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smart_health_backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_NAME=smart_health_db
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword
+      - USE_H2_DATABASE=false
+      - ML_SERVICE_URL=http://ml-service:5000
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      ml-service:
+        condition: service_started
+    networks:
+      - smart_health_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smart_health_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api
+    depends_on:
+      - backend
+    networks:
+      - smart_health_net
+
+volumes:
+  mysql_data:
+
+networks:
+  smart_health_net:
+    driver: bridge
