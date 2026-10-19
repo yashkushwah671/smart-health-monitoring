@@ -20,11 +20,11 @@ apiClient.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// Interceptor for 401 response handling
+// Interceptor for 401/403 response handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       if (window.location.pathname !== '/login') {
         localStorage.removeItem('smart_health_token');
         localStorage.removeItem('smart_health_user');
