@@ -63,7 +63,7 @@ export const Sidebar = ({ isOpen, closeSidebar }) => {
       to: '/settings',
       label: 'System Settings',
       icon: Settings,
-      roles: ['ROLE_ADMIN', 'ROLE_DISTRICT_OFFICER', 'ROLE_ASHA_WORKER'],
+      roles: ['ROLE_ADMIN'],
     },
   ];
 
