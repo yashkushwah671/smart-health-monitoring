@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Activity, Lock, User, ShieldCheck, ArrowRight, Info } from 'lucide-react';
+import { getApiBaseUrl, setCustomApiUrl } from '../services/api';
+import { Activity, Lock, User, ShieldCheck, ArrowRight, Info, Server, Settings } from 'lucide-react';
 
 export const LoginPage = () => {
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('password123');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showServerConfig, setShowServerConfig] = useState(false);
+  const [customUrl, setCustomUrl] = useState(() => localStorage.getItem('smart_health_custom_api_url') || '');
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,10 +23,19 @@ export const LoginPage = () => {
       await login(username, password);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid credentials or backend unavailable');
+      const activeUrl = getApiBaseUrl();
+      const detail = err.response?.data?.message || err.message || 'Unknown network error';
+      setError(`Cannot connect to backend (${activeUrl}): ${detail}. If your Render service is waking up, wait 30 seconds and retry.`);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSaveServerUrl = (e) => {
+    e.preventDefault();
+    setCustomApiUrl(customUrl);
+    setShowServerConfig(false);
+    setError(null);
   };
 
   const handleQuickLogin = (demoUser) => {
@@ -202,6 +214,52 @@ export const LoginPage = () => {
             </div>
             <div className="text-[10px] text-slate-400 mt-2 text-center">
               Default demo password for all accounts: <code className="text-teal-300">password123</code>
+            </div>
+
+            {/* Backend Server Settings */}
+            <div className="mt-4 pt-3 border-t border-slate-800/60 flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => setShowServerConfig(!showServerConfig)}
+                className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-teal-400 transition"
+              >
+                <Server className="w-3.5 h-3.5" />
+                <span>API: <code className="text-teal-400">{getApiBaseUrl()}</code></span>
+                <span className="text-[10px] text-slate-500 underline ml-1">Change</span>
+              </button>
+
+              {showServerConfig && (
+                <form onSubmit={handleSaveServerUrl} className="mt-3 w-full p-3 rounded-xl border border-slate-700 bg-slate-950/90 text-left">
+                  <div className="text-xs font-semibold text-white mb-1 flex items-center justify-between">
+                    <span>Render Backend Server URL</span>
+                    <button
+                      type="button"
+                      onClick={() => { setCustomUrl(''); setCustomApiUrl(''); setShowServerConfig(false); }}
+                      className="text-[10px] text-rose-400 hover:underline"
+                    >
+                      Reset Default
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-slate-400 mb-2">
+                    Enter your live Render backend URL (e.g. <code>https://smart-health-backend.onrender.com</code>):
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={customUrl}
+                      onChange={(e) => setCustomUrl(e.target.value)}
+                      placeholder="https://smart-health-backend.onrender.com"
+                      className="flex-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-teal-500 focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="px-3 py-1.5 rounded-lg bg-teal-500 text-slate-950 text-xs font-bold hover:bg-teal-400 transition"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
 

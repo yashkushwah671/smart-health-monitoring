@@ -44,6 +44,9 @@ public class MlPredictionService {
 
     private Prediction callPythonMlService(Observation obs) {
         String baseUrl = mlServiceUrl != null ? mlServiceUrl.trim() : "http://localhost:5000";
+        if (!baseUrl.contains(".") && !baseUrl.startsWith("/") && !baseUrl.contains("localhost") && !baseUrl.contains(":")) {
+            baseUrl = baseUrl + ".onrender.com";
+        }
         if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
             baseUrl = "https://" + baseUrl;
         }

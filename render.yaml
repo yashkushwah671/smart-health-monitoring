@@ -27,10 +27,7 @@ services:
       - key: PORT
         value: 8080
       - key: ML_SERVICE_URL
-        fromService:
-          type: web
-          name: smart-health-ml
-          property: host
+        value: "https://smart-health-ml.onrender.com"
       - key: JAVA_OPTS
         value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Xss512k"
 
@@ -48,8 +45,5 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_BASE_URL
-        fromService:
-          type: web
-          name: smart-health-backend
-          property: host
+        value: "https://smart-health-backend.onrender.com/api"
 

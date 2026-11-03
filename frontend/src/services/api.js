@@ -1,9 +1,14 @@
 import axios from 'axios';
 
-const rawBaseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
-const normalizeApiUrl = (url) => {
+export const normalizeApiUrl = (url) => {
   if (!url || url === '/api') return '/api';
   let clean = url.trim();
+
+  // If it's a private Render internal hostname like "smart-health-backend" (contains no dot)
+  if (!clean.includes('.') && !clean.startsWith('/') && !clean.includes('localhost')) {
+    clean = `${clean}.onrender.com`;
+  }
+
   if (!clean.startsWith('http://') && !clean.startsWith('https://') && !clean.startsWith('/')) {
     clean = `https://${clean}`;
   }
@@ -14,17 +19,32 @@ const normalizeApiUrl = (url) => {
   return clean;
 };
 
-const API_BASE_URL = normalizeApiUrl(rawBaseUrl);
+export const getApiBaseUrl = () => {
+  const custom = localStorage.getItem('smart_health_custom_api_url');
+  if (custom && custom.trim()) {
+    return normalizeApiUrl(custom);
+  }
+  return normalizeApiUrl(import.meta.env.VITE_API_BASE_URL || '/api');
+};
+
+export const setCustomApiUrl = (url) => {
+  if (!url || !url.trim()) {
+    localStorage.removeItem('smart_health_custom_api_url');
+  } else {
+    localStorage.setItem('smart_health_custom_api_url', url.trim());
+  }
+};
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor to inject JWT Bearer Token
+// Interceptor to inject dynamic Base URL and JWT Bearer Token
 apiClient.interceptors.request.use((config) => {
+  config.baseURL = getApiBaseUrl();
   const token = localStorage.getItem('smart_health_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
