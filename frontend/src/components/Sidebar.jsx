@@ -95,20 +95,6 @@ export const Sidebar = ({ isOpen, closeSidebar }) => {
             </button>
           </div>
 
-          {/* User Sub-centre Badge */}
-          {user && (
-            <div className="rounded-xl border border-teal-500/20 bg-teal-500/5 p-3">
-              <div className="text-[11px] font-medium text-teal-400 uppercase tracking-wider">
-                Jurisdiction / Sub-Centre
-              </div>
-              <div className="mt-0.5 font-semibold text-sm text-white truncate">
-                {user.subCentre || 'All Surveillance Zones'}
-              </div>
-              <div className="text-xs text-slate-400 mt-0.5">
-                {user.state} • {user.districtName || 'State Surveillance'}
-              </div>
-            </div>
-          )}
 
           {/* Navigation Links */}
           <nav className="space-y-1.5">
