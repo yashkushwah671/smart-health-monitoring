@@ -37,8 +37,9 @@ services:
   # ============================================================================
   # 3. React Frontend (Free Static Site via Global CDN)
   # ============================================================================
-  - type: static
+  - type: web
     name: smart-health-frontend
+    runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: ./frontend/dist
     plan: free
