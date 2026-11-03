@@ -5,15 +5,12 @@ import {
   LayoutDashboard,
   MapPin,
   FilePlus,
-  UploadCloud,
   AlertTriangle,
-  Cpu,
   FileText,
   Map,
   Users,
   Settings,
   ShieldAlert,
-  Sparkles
 } from 'lucide-react';
 
 export const Sidebar = ({ isOpen, closeSidebar }) => {
@@ -39,21 +36,9 @@ export const Sidebar = ({ isOpen, closeSidebar }) => {
       roles: ['ROLE_ADMIN', 'ROLE_ASHA_WORKER', 'ROLE_DISTRICT_OFFICER'],
     },
     {
-      to: '/csv-upload',
-      label: 'Bulk CSV Import',
-      icon: UploadCloud,
-      roles: ['ROLE_ADMIN', 'ROLE_DISTRICT_OFFICER', 'ROLE_ASHA_WORKER'],
-    },
-    {
       to: '/alerts',
       label: 'Early-Warning Alerts',
       icon: AlertTriangle,
-      roles: ['ROLE_ADMIN', 'ROLE_DISTRICT_OFFICER', 'ROLE_ASHA_WORKER'],
-    },
-    {
-      to: '/simulation',
-      label: 'What-If Simulation',
-      icon: Sparkles,
       roles: ['ROLE_ADMIN', 'ROLE_DISTRICT_OFFICER', 'ROLE_ASHA_WORKER'],
     },
     {

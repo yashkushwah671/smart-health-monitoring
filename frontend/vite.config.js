@@ -9,8 +9,9 @@ export default defineConfig({
     host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true
+        target: 'https://smart-health-backend-xebd.onrender.com',
+        changeOrigin: true,
+        secure: true
       }
     }
   }

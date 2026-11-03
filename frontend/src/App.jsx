@@ -9,10 +9,8 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import GisMapPage from './pages/GisMapPage';
 import DataEntryPage from './pages/DataEntryPage';
-import CsvUploadPage from './pages/CsvUploadPage';
 import PredictionViewPage from './pages/PredictionViewPage';
 import AlertsPage from './pages/AlertsPage';
-import SimulationPage from './pages/SimulationPage';
 import ReportsPage from './pages/ReportsPage';
 import VillageManagementPage from './pages/VillageManagementPage';
 import UserManagementPage from './pages/UserManagementPage';
@@ -39,10 +37,8 @@ const ProtectedLayout = () => {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/gis-map" element={<GisMapPage />} />
             <Route path="/data-entry" element={<DataEntryPage />} />
-            <Route path="/csv-upload" element={<CsvUploadPage />} />
             <Route path="/prediction/:id" element={<PredictionViewPage />} />
             <Route path="/alerts" element={<AlertsPage />} />
-            <Route path="/simulation" element={<SimulationPage />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/villages" element={<VillageManagementPage />} />
             <Route path="/users" element={<UserManagementPage />} />
