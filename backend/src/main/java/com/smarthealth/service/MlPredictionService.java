@@ -43,7 +43,14 @@ public class MlPredictionService {
     }
 
     private Prediction callPythonMlService(Observation obs) {
-        String url = mlServiceUrl + "/predict";
+        String baseUrl = mlServiceUrl != null ? mlServiceUrl.trim() : "http://localhost:5000";
+        if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
+            baseUrl = "https://" + baseUrl;
+        }
+        if (baseUrl.endsWith("/")) {
+            baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+        }
+        String url = baseUrl + "/predict";
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("rainfall_mm", obs.getRainfallMm().doubleValue());

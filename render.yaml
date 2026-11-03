@@ -1,0 +1,55 @@
+services:
+  # ============================================================================
+  # 1. Python ML Microservice (Disease Risk & Explainability Engine)
+  # ============================================================================
+  - type: web
+    name: smart-health-ml
+    runtime: docker
+    dockerfilePath: ./ml-service/Dockerfile
+    dockerContext: ./ml-service
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 5000
+
+  # ============================================================================
+  # 2. Spring Boot Backend API
+  # ============================================================================
+  - type: web
+    name: smart-health-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: ML_SERVICE_URL
+        fromService:
+          type: web
+          name: smart-health-ml
+          property: host
+      - key: JAVA_OPTS
+        value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Xss512k"
+
+  # ============================================================================
+  # 3. React Frontend (Free Static Site via Global CDN)
+  # ============================================================================
+  - type: static
+    name: smart-health-frontend
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: smart-health-backend
+          property: host
+
