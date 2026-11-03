@@ -27,7 +27,7 @@ services:
       - key: PORT
         value: 8080
       - key: ML_SERVICE_URL
-        value: "https://smart-health-ml.onrender.com"
+        value: "https://smart-health-backend-xebd.onrender.com/"
       - key: JAVA_OPTS
         value: "-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Xss512k"
 
@@ -45,5 +45,5 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_BASE_URL
-        value: "https://smart-health-backend.onrender.com/api"
+        value: "https://smart-health-backend-xebd.onrender.com/api"
 
