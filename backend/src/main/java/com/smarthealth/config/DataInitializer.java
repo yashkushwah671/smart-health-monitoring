@@ -141,7 +141,7 @@ public class DataInitializer implements ApplicationRunner {
                 .build();
 
         Observation saved = observationRepository.save(obs);
-        Prediction pred = mlPredictionService.generatePrediction(saved);
+        Prediction pred = mlPredictionService.generateSeedPrediction(saved);
         alertService.checkAndGenerateAlert(pred);
     }
 }

@@ -42,6 +42,12 @@ public class MlPredictionService {
         return predictionRepository.save(prediction);
     }
 
+    @Transactional
+    public Prediction generateSeedPrediction(Observation observation) {
+        Prediction prediction = evaluateEpidemiologicalFallback(observation);
+        return predictionRepository.save(prediction);
+    }
+
     private Prediction callPythonMlService(Observation obs) {
         String baseUrl = mlServiceUrl != null ? mlServiceUrl.trim() : "http://localhost:5000";
         if (!baseUrl.contains(".") && !baseUrl.startsWith("/") && !baseUrl.contains("localhost") && !baseUrl.contains(":")) {
