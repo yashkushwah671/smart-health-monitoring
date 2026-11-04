@@ -3,19 +3,15 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import StatCard from '../components/StatCard';
 import RiskBadge from '../components/RiskBadge';
-import AlertModal from '../components/AlertModal';
 import {
   MapPin,
   ShieldCheck,
   AlertTriangle,
   AlertOctagon,
-  CloudRain,
-  Droplets,
   Activity,
   ArrowUpRight,
   RefreshCw,
   PlusCircle,
-  FileSpreadsheet
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -35,7 +31,6 @@ export const DashboardPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedAlert, setSelectedAlert] = useState(null);
 
   const fetchDashboard = async () => {
     setLoading(true);
@@ -253,62 +248,6 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Active Alerts Ticker */}
-      {data.activeAlerts && data.activeAlerts.length > 0 && (
-        <div className="rounded-2xl border border-rose-500/30 bg-gradient-to-r from-rose-950/40 to-slate-900 p-5 shadow-xl">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="rounded-lg bg-rose-500/20 p-2 text-rose-400">
-                <AlertOctagon className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-bold text-white text-sm sm:text-base">
-                  Active Early-Warning Surveillance Alerts ({data.activeAlerts.length})
-                </h3>
-                <p className="text-xs text-slate-300">Requires human review & field response verification</p>
-              </div>
-            </div>
-            <Link
-              to="/alerts"
-              className="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1"
-            >
-              <span>View All</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-2">
-            {data.activeAlerts.slice(0, 3).map((alert) => (
-              <div
-                key={alert.id}
-                className="rounded-xl border border-slate-800 bg-slate-900/90 p-3.5 space-y-2 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-white">{alert.villageName}</span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                      {alert.status}
-                    </span>
-                  </div>
-                  <div className="text-[11px] text-slate-400 font-mono mt-0.5">
-                    {alert.districtName} • {alert.alertCode}
-                  </div>
-                  <p className="text-xs text-slate-300 mt-2 line-clamp-2">
-                    {alert.triggerReason}
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => setSelectedAlert(alert)}
-                  className="w-full mt-2 rounded-lg bg-slate-800 hover:bg-slate-700 py-1.5 text-xs font-semibold text-teal-400 transition"
-                >
-                  Review Action Protocol
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Recent Observations Table */}
       <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl backdrop-blur-md">
@@ -401,14 +340,6 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Review Alert Modal */}
-      {selectedAlert && (
-        <AlertModal
-          alert={selectedAlert}
-          onClose={() => setSelectedAlert(null)}
-          onUpdated={handleAlertUpdated}
-        />
-      )}
     </div>
   );
 };
