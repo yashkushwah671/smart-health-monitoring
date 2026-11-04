@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import RiskBadge from '../components/RiskBadge';
-import { FileText, Download, Filter, Search, RefreshCw, Eye } from 'lucide-react';
+import { FileText, Filter, Search, RefreshCw, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ReportsPage = () => {
@@ -48,19 +48,9 @@ export const ReportsPage = () => {
     return matchDist && matchVill && matchSearch;
   });
 
-  const handleExportCsv = () => {
-    const url = api.exportCsvUrl(
-      selectedDistrict ? districts.find((d) => d.districtName === selectedDistrict)?.id : null,
-      selectedVillage || null,
-      startDate || null,
-      endDate || null
-    );
-    window.open(url, '_blank');
-  };
-
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header & Export Button */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
@@ -68,17 +58,9 @@ export const ReportsPage = () => {
             <span>Surveillance Reports & Historical Audit Logs</span>
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Filter, inspect, and export longitudinal community health, rainfall, and water quality surveillance records.
+            Filter and inspect longitudinal community health, rainfall, and water quality surveillance records.
           </p>
         </div>
-
-        <button
-          onClick={handleExportCsv}
-          className="flex items-center gap-2 rounded-xl bg-teal-500 px-5 py-2.5 text-xs font-bold text-slate-950 shadow-md shadow-teal-500/20 hover:bg-teal-400 transition"
-        >
-          <Download className="w-4 h-4" />
-          <span>Export Surveillance CSV</span>
-        </button>
       </div>
 
       {/* Filter Bar */}

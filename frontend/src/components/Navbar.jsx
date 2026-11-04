@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Activity, Wifi, WifiOff, RefreshCw, LogOut, User, Bell } from 'lucide-react';
+import { Activity, RefreshCw, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Navbar = ({ toggleSidebar }) => {
@@ -42,20 +42,8 @@ export const Navbar = ({ toggleSidebar }) => {
         </div>
       )}
 
-      {/* Right Controls: Connectivity, Offline queue, Role Badge, User Profile */}
+      {/* Right Controls: Offline queue, Role Badge, User Profile */}
       <div className="flex items-center gap-3">
-        {/* Connectivity Badge */}
-        <div
-          className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border ${
-            isOnline
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-              : 'bg-rose-500/10 text-rose-400 border-rose-500/30 animate-pulse'
-          }`}
-          title={isOnline ? 'System is online & connected to central server' : 'Offline mode active'}
-        >
-          {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
-          <span className="hidden sm:inline">{isOnline ? 'Online' : 'Offline'}</span>
-        </div>
 
         {/* Offline Queue Syncer */}
         {offlineCount > 0 && (
