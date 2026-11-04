@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import api from '../services/api';
 import RiskBadge from '../components/RiskBadge';
-import { MapPin, Filter, AlertTriangle, ShieldCheck, Droplets, Info, Sparkles, PlusCircle } from 'lucide-react';
+import { MapPin, Filter, AlertTriangle, ShieldCheck, Droplets, Info, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Fix default leaflet icon issues in React
@@ -137,11 +137,10 @@ export const GisMapPage = () => {
               <button
                 key={risk}
                 onClick={() => setSelectedRisk(risk)}
-                className={`px-2.5 py-1 rounded-lg font-medium transition ${
-                  selectedRisk === risk
+                className={`px-2.5 py-1 rounded-lg font-medium transition ${selectedRisk === risk
                     ? 'bg-teal-500 text-slate-950 font-bold'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 {risk === 'ALL' ? 'All Risk' : risk}
               </button>
@@ -165,7 +164,7 @@ export const GisMapPage = () => {
             className="w-full h-full"
           >
             <ChangeMapView coords={mapCenter} zoom={mapZoom} />
-            
+
             {/* OpenStreetMap Layer with Dark Tile Filter */}
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -302,14 +301,6 @@ export const GisMapPage = () => {
                 >
                   <PlusCircle className="w-4 h-4" />
                   <span>Submit Field Observation</span>
-                </Link>
-
-                <Link
-                  to={`/simulation?villageId=${selectedVillage.villageId}`}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800 py-2 text-xs font-semibold text-teal-300 hover:bg-slate-700 transition"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Run What-If Rainfall Simulation</span>
                 </Link>
               </div>
             </div>
